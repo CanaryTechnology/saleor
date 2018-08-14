@@ -104,6 +104,10 @@ def test_create_variant(admin_api_client, product, product_type):
                             amount
                             localized
                         }
+                        weight {
+                            amount
+                            unit
+                        }
                     }
                 }
             }
@@ -123,6 +127,7 @@ def test_create_variant(admin_api_client, product, product_type):
         'quantity': quantity,
         'costPrice': cost_price,
         'priceOverride': price_override,
+        'weight': '10 kg',
         'attributes': [
             {'slug': variant_slug, 'value': variant_value}],
         'trackInventory': True})
@@ -138,6 +143,8 @@ def test_create_variant(admin_api_client, product, product_type):
     assert data['sku'] == sku
     assert data['attributes'][0]['attribute']['slug'] == variant_slug
     assert data['attributes'][0]['value']['slug'] == variant_value
+    assert data['weight']['unit'] == 'kg'
+    assert data['weight']['amount'] == float(10)
 
 
 def test_update_product_variant(admin_api_client, product):
